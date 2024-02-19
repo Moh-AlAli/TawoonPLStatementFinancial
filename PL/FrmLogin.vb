@@ -67,6 +67,8 @@ Partial Friend Class FrmLogin
             ERPSession = New Session()
             ERPSession.Init("", "XX", "XX1000", "67A")
             ERPSession.Open(txtUser.Text.ToUpper(), txtPwd.Text.ToUpper(), c.ID.ToUpper(), DateTime.Parse(dtSesDate.Text), 0)
+            '
+
         Catch ex As Exception
             Dim erstr As String = ""
             Dim erlst As List(Of String) = New List(Of String)()

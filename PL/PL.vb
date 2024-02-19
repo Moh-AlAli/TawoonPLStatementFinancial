@@ -1,18 +1,13 @@
 ﻿Imports System.Runtime.InteropServices
 Imports acc = ACCPAC.Advantage
-Imports System.Data.SqlClient
-Imports Excel = Microsoft.Office.Interop.Excel
-Imports System.IO
-Imports System.Security.Cryptography
-Imports System.Text
-Imports DocumentFormat.OpenXml.Drawing.Diagrams
+
 
 Public Class PL
     Private server As String
     Private uid As String
     Private pass As String
     Private frmacct As String
-    Private Toacct As String
+    Private toacct As String
     Private Toopttype As String
     Private Tooptsubtype As String
     Private Tooptcat As String
@@ -48,40 +43,7 @@ Public Class PL
         InitializeComponent()
     End Sub
 
-    Friend Function createdes(ByVal key As String) As TripleDES
-        Dim md5 As MD5 = New MD5CryptoServiceProvider()
-        Dim des As TripleDES = New TripleDESCryptoServiceProvider()
-        des.Key = md5.ComputeHash(Encoding.Unicode.GetBytes(key))
-        des.IV = New Byte(des.BlockSize \ 8 - 1) {}
-        Return des
-    End Function
-    Friend Function Decryption(ByVal cyphertext As String, ByVal key As String) As String
-        Dim b As Byte() = Convert.FromBase64String(cyphertext)
-        Dim des As TripleDES = createdes(key)
-        Dim ct As ICryptoTransform = des.CreateDecryptor()
-        Dim output As Byte() = ct.TransformFinalBlock(b, 0, b.Length)
-        Return Encoding.Unicode.GetString(output)
-    End Function
-    Friend Function Readconnectionstring() As String
 
-        Dim secretkey As String = "Fhghqwjehqwlegtoit123mnk12%&4#"
-        Dim path As String = ("txtcon\SQLwelfcon.txt")
-        Dim sr As New StreamReader(path)
-
-        server = sr.ReadLine()
-        Dim db As String = sr.ReadLine()
-        uid = sr.ReadLine()
-        pass = sr.ReadLine()
-
-
-        server = Decryption(server, secretkey)
-        uid = Decryption(uid, secretkey)
-        pass = Decryption(pass, secretkey)
-        compid = ERPSession.CompanyID
-        Dim cons As String = "Data Source =" & server & "; DataBase =" & compid & "; User Id =" & uid & "; Password =" & pass & ";"
-
-        Return cons
-    End Function
     Private Sub PL_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             If Not ObjectHandle Is Nothing Then
@@ -203,8 +165,8 @@ Public Class PL
 
 
         '        End If
-        '        Txtfrmacct.Text = s(0)
-        '    Case "Txttoacct"
+        '        cfacct = s(0)
+        '    Case "Txtctacct"
 
         '        If _oldVendNumb.Trim() <> txb.Text.Trim() Then
         '            msg = getValidationData("select ID=ACCTID,NAM=ACCTDESC from GLAMF where ACCTID='" & txb.Text & "'", s)
@@ -225,7 +187,7 @@ Public Class PL
         '        End If
 
 
-        '  Txttoacct.Text = s(0)
+        '  Txtctacct.Text = s(0)
         ' End If
         ' End Select
     End Sub
@@ -492,25 +454,21 @@ Public Class PL
 
     Private Sub butexpexc_Click(sender As Object, e As EventArgs) Handles butexpexc.Click
         Try
-            Dim ds As New DataSet
-            Dim conn As New SqlConnection(Readconnectionstring())
-            Dim da As New SqlDataAdapter
+            'Dim ds As New DataSet
+            'Dim conn As New SqlConnection(Readconnectionstring())
+            'Dim da As New SqlDataAdapter
 
-            Dim iRowCnt As Integer = 0
+            'Dim iRowCnt As Integer = 0
 
-            Cursor.Current = Cursors.WaitCursor
-            Dim sEmpList As String = ""
+            'Cursor.Current = Cursors.WaitCursor
+            'Dim sEmpList As String = ""
 
 
-
-            Dim xlAppToUpload As New Excel.Application
-            Dim excelBook As Excel.Workbook = xlAppToUpload.Workbooks.Add()
-            Dim xlWorkSheetToUpload As Excel.Worksheet
 
             If Txttoacct.Text = Nothing Then
-                Toacct = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+                toacct = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
             Else
-                Toacct = Trim(Txttoacct.Text)
+                toacct = Trim(Txttoacct.Text)
             End If
 
             If Txtttype.Text = Nothing Then
@@ -587,212 +545,52 @@ Public Class PL
             fdate = DateTimePicker1.Value.Year & fmonth & fday
             tdate = DateTimePicker2.Value.Year & tmonth & tday
 
+            Dim totype As String = ""
+            If Txtttype.Text = Nothing Then
+                totype = "zzzzzzzzzzzzzzzzzzzzzz"
+            Else
+                totype = Trim(Txtttype.Text)
+            End If
+
+            Dim tosubtype As String = ""
+            If Txttsubt.Text = Nothing Then
+                tosubtype = "zzzzzzzzzzzzzzzzzzzzzz"
+            Else
+                tosubtype = Trim(Txttsubt.Text)
+            End If
+
+            Dim tocat As String = ""
+            If Txttcat.Text = Nothing Then
+                tocat = "zzzzzzzzzzzzzzzzzzzzzz"
+            Else
+                tocat = Trim(Txttcat.Text)
+            End If
             If ram = Nothing And jor = Nothing And gen = Nothing And ocj = Nothing And leb = Nothing Then
                 MessageBox.Show("P&L:Choose At least one Entity")
             Else
 
 
-                If trim(Txtfrmacct.Text)<=trim(Txttoacct .Text) Then
+                If Trim(Txtfrmacct.Text) <= Trim(toacct) Then
 
 
-                If fdate <= tdate Then
-                Try
-                xlWorkSheetToUpload = CType(excelBook.Worksheets(1), Excel.Worksheet)
+                    If fdate <= tdate Then
+                        Try
 
+                            Dim f As Form = New crviewer(ObjectHandle, ERPSession, Trim(Txtfrmacct.Text), toacct, fdate, tdate, ChRAMDAT.Checked, ChGENDAT.Checked, ChJORDAT.Checked, ChOCJDAT.Checked, ChLEBDAT.Checked, Trim(Txtftype.Text), Trim(Txtfsubt.Text), Trim(Txtfcat.Text), totype, tosubtype, tocat)
+                            f.Show()
 
+                        Catch ex As Exception
+                            MessageBox.Show("P&L:" & ex.Message)
+                        End Try
 
-                            Dim sSql As String = "select distinct hh.ENTITY,hh.ACCTID,hh.OPTTYPE,hh.OPTSUBTYPE,hh.OPTCAT,hh.ACCTDESC,hh.ACCTTYPE,sum(hh.BegBalance) as BegBalance ,sum(hh.Debit) as Debit,Sum(hh.Credit) as Credit,Sum(hh.NetChange) as NetChange,Sum(hh.EndingBalance)  as EndingBalance   from ("
-                            If ram<>Nothing Then
-                                sSql += " select m.ORGID as ENTITY,f.ACCTID,(select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) as OPTTYPE ,(select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) as OPTSUBTYPE,(select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID) as OPTCAT , ACCTDESC,(case when f.ACCTTYPE='I' then 'Income statement' when f.ACCTTYPE='B' then 'Balance sheet' when f.ACCTTYPE='R' then 'Retairned Earning'  end) as ACCTTYPE,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE <" & fdate & "),0) as BegBalance,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)>=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'   and bb.DOCDATE between " & fdate & " and " & tdate & "),0) as Debit,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)<=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE between " & fdate & " and " & tdate & "),0)  as Credit ,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE between " & fdate & " and " & tdate & "),0)  as NetChange,coalesce((select SUM(coalesce(bb.TRANSAMT,0))  from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE between " & fdate & " and " & tdate & "),0)+coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & ram & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE <" & fdate & " ),0)  as EndingBalance from " & ram & "glamf f," & ram & "glpost p," & ram & "CSCOM m where m.ORGID=f.AUDTORG and 
-  f.ACCTID =p.ACCTID and 
-  p.ACCTID between '" & Trim(Txtfrmacct.Text) & "' and '" & Toacct & "' and p.DOCDATE <=  " & tdate & " and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ram & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'
-  union all"
-                            End If
-                           If jor<> Nothing Then
-                                sSql += " select m.ORGID as ENTITY,f.ACCTID,(select top 1 [VALUE]  from  " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) as OPTTYPE ,(select top 1 [VALUE]  from   " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID  ) as OPTSUBTYPE,(select top 1 [VALUE]  from   " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID) as OPTCAT,ACCTDESC,(case when f.ACCTTYPE='I' then 'Income statement' when f.ACCTTYPE='B' then 'Balance sheet' when f.ACCTTYPE='R' then 'Retairned Earning'  end) as ACCTTYPE,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as BegBalance,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)>=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as Debit,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)<=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as Credit ,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as NetChange,coalesce((select SUM(coalesce(bb.TRANSAMT,0))  from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & "  and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)+coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & jor & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' ),0)  as EndingBalance from " & jor & "glamf f," & jor & "glpost p," & jor & "CSCOM m where m.ORGID=f.AUDTORG and 
-  f.ACCTID =p.ACCTID and 
-  p.ACCTID between '" & Trim(Txtfrmacct.Text) & "' and '" & Toacct & "' and p.DOCDATE <=  " & tdate & " and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & jor & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'
-  union all"
-                            End If
-
- If gen<>Nothing Then
-                                sSql += " select m.ORGID as ENTITY,f.ACCTID,(select top 1 [VALUE]  from  " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) as OPTTYPE ,(select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) as OPTSUBTYPE,(select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID) as OPTCAT , ACCTDESC,(case when f.ACCTTYPE='I' then 'Income statement' when f.ACCTTYPE='B' then 'Balance sheet' when f.ACCTTYPE='R' then 'Retairned Earning'  end) as ACCTTYPE,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & gen & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & " and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as BegBalance,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)>=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & gen & "glpost bb where bb.ACCTID=f.ACCTID and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "') between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "' and bb.DOCDATE between " & fdate & " and " & tdate & "),0) as Debit,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)<=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & gen & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as Credit ,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from " & gen & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as NetChange,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from " & gen & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)+coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from " & gen & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & "  and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as EndingBalance from " & gen & "glamf f," & gen & "glpost p ," & gen & "CSCOM m where m.ORGID=f.AUDTORG and 
- f.ACCTID =p.ACCTID and 
- p.ACCTID between '" & Trim(Txtfrmacct.Text) & "' and '" & Toacct & "' and p.DOCDATE <=  " & tdate & " and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & gen & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'
- union all"
-                            End If
- If leb<>Nothing Then
-                                sSql += " select m.ORGID as ENTITY,f.ACCTID,(select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) as OPTTYPE ,(select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) as OPTSUBTYPE,(select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID) as OPTCAT , ACCTDESC,(case when f.ACCTTYPE='I' then 'Income statement' when f.ACCTTYPE='B' then 'Balance sheet' when f.ACCTTYPE='R' then 'Retairned Earning'  end) as ACCTTYPE,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as BegBalance,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)>=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID  and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as Debit,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)<=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as Credit ,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as NetChange,coalesce((select SUM(coalesce(bb.TRANSAMT,0))  from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)+coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & leb & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & "  and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as EndingBalance from " & leb & "glamf f," & leb & "glpost p," & leb & "CSCOM m where m.ORGID=f.AUDTORG and 
-  f.ACCTID =p.ACCTID and 
-  p.ACCTID between '" & Trim(Txtfrmacct.Text) & "' and '" & Toacct & "' and p.DOCDATE <=  " & tdate & " and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & leb & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'
-  union all"
-                            End If
-
-                            If ocj <> Nothing Then
-                                sSql += " select m.ORGID as ENTITY,f.ACCTID,(select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) as OPTTYPE ,(select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) as OPTSUBTYPE,(select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID) as OPTCAT , ACCTDESC,(case when f.ACCTTYPE='I' then 'Income statement' when f.ACCTTYPE='B' then 'Balance sheet'  when f.ACCTTYPE='R' then 'Retairned Earning' end) as ACCTTYPE,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as BegBalance,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)>=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID  and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0) as Debit,coalesce((select SUM(case when coalesce(bb.TRANSAMT,0)<=0 then coalesce(bb.TRANSAMT,0) else 0 end ) from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as Credit ,coalesce((select SUM(coalesce(bb.TRANSAMT,0)) from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as NetChange,coalesce((select SUM(coalesce(bb.TRANSAMT,0))  from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE between " & fdate & " and " & tdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)+coalesce((select SUM(coalesce(bb.TRANSAMT,0) ) from  " & ocj & "glpost bb where bb.ACCTID=f.ACCTID and bb.DOCDATE <" & fdate & "  and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =bb.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'),0)  as EndingBalance from " & ocj & "glamf f," & ocj & "glpost p," & ocj & "CSCOM m where m.ORGID=f.AUDTORG and 
-  f.ACCTID =p.ACCTID and 
-  p.ACCTID between '" & Trim(Txtfrmacct.Text) & "' and '" & Toacct & "' and p.DOCDATE <=  " & tdate & " and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL1' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtftype.Text) & "' and N'" & Toopttype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL2' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfsubt.Text) & "' and N'" & Tooptsubtype & "' and (select top 1 [VALUE]  from " & ocj & "GLAMFO o where o.OPTFIELD='LEVEL3' and o.ACCTID =f.ACCTID ) between N'" & Trim(Txtfcat.Text) & "' and N'" & Tooptcat & "'
-  union all"
-                            End If
-                            sSql = sSql.Substring(0, sSql.Length() - 9)
-
-                            sSql +=") hh
-  group by hh.ENTITY,hh.ACCTID,hh.OPTTYPE,hh.OPTSUBTYPE,hh.OPTCAT,hh.ACCTDESC,hh.ACCTTYPE
-  order by hh.ENTITY,hh.ACCTID "
-
-
-
-
-
-                            Dim cmd As New SqlCommand(sSql, conn)
-                conn.Open()
-
-                cmd.CommandTimeout = 0
-
-                Dim sdrGetEmpDetails As SqlDataReader = cmd.ExecuteReader
-
-
-
-
-
-                CType(excelBook.Sheets("Sheet1"), Excel.Worksheet).Name = "P&L"
-
-                iRowCnt = 2
-
-
-                If sdrGetEmpDetails.HasRows Then
-
-                    xlAppToUpload.Visible = True
-
-                    With xlWorkSheetToUpload
-
-
-                                    .Cells(iRowCnt - 1, 1).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 1).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 1).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 1).value = "Entity"
-
-                                    .Cells(iRowCnt - 1, 2).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 2).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 2).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 2).value = "Account Number"
-
-                                    .Cells(iRowCnt - 1, 3).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 3).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 3).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 3).value = "Type"
-
-                                    .Cells(iRowCnt - 1, 4).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 4).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 4).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 4).value = "Sub.Type"
-
-                                    .Cells(iRowCnt - 1, 5).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 5).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 5).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 5).value = "Category"
-
-                                    .Cells(iRowCnt - 1, 6).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 6).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 6).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 6).value = "Account Name"
-
-                                    .Cells(iRowCnt - 1, 7).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 7).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 7).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 7).value = "Statement Type"
-
-                                    .Cells(iRowCnt - 1, 8).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 8).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 8).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 8).value = "Beg Balance"
-
-                                    .Cells(iRowCnt - 1, 9).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 9).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 9).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 9).value = "Debit"
-
-                                    .Cells(iRowCnt - 1, 10).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 10).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 10).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 10).value = "Credit"
-
-                                    .Cells(iRowCnt - 1, 11).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 11).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 11).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 11).value = "Net Change"
-
-                                    .Cells(iRowCnt - 1, 12).Font.Size = 11
-                                    .Cells(iRowCnt - 1, 12).EntireRow.Font.Bold = True
-                                    .Cells(iRowCnt - 1, 12).Font.Name = "Arial"
-                                    .Cells(iRowCnt - 1, 12).value = "Ending Balamce"
-
-
-
-
-
-                                    iRowCnt = 1
-
-                                    '''''
-
-
-
-                                    While sdrGetEmpDetails.Read
-
-                            .Cells(iRowCnt + 1, 1).value = sdrGetEmpDetails.Item("ENTITY")
-                            .Cells(iRowCnt + 1, 2).value = sdrGetEmpDetails.Item("ACCTID")
-                            .Cells(iRowCnt + 1, 3).value = sdrGetEmpDetails.Item("OPTTYPE")
-                            .Cells(iRowCnt + 1, 4).value = sdrGetEmpDetails.Item("OPTSUBTYPE")
-                            .Cells(iRowCnt + 1, 5).value = sdrGetEmpDetails.Item("OPTCAT")
-                            .Cells(iRowCnt + 1, 6).value = sdrGetEmpDetails.Item("ACCTDESC")
-                            .Cells(iRowCnt + 1, 7).value = sdrGetEmpDetails.Item("ACCTTYPE")
-                            .Cells(iRowCnt + 1, 8).value = sdrGetEmpDetails.Item("BegBalance")
-                            .Cells(iRowCnt + 1, 9).value = sdrGetEmpDetails.Item("Debit")
-                            .Cells(iRowCnt + 1, 10).value = sdrGetEmpDetails.Item("Credit")
-                            .Cells(iRowCnt + 1, 11).value = sdrGetEmpDetails.Item("NetChange")
-                            .Cells(iRowCnt + 1, 12).value = sdrGetEmpDetails.Item("EndingBalance")
-                            iRowCnt = iRowCnt + 1
-                        End While
-
-                    End With
-                    conn.Close()
-
-                End If
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Catch ex As Exception
-                MessageBox.Show("P&L:" & ex.Message)
-            End Try
-
+                    Else
+                        MessageBox.Show("P&L: From Date Greater than To Date")
+                    End If
                 Else
-                    MessageBox.Show("P&L: From Date Greater than To Date")
-                End If
-                Else
-                MessageBox.Show("P&L: From Account Number Greater than To Account Number")
+                    MessageBox.Show("P&L: From Account Number Greater than To Account Number")
             End If         
                 End If
-            Cursor.Current = Cursors.Default
 
-            MessageBox.Show("P&L Export Finished")
 
 
         Catch ex As Exception

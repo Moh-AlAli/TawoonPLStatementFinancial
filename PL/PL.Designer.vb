@@ -92,7 +92,7 @@ Partial Class PL
         Me.butexpexc.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.butexpexc.Size = New System.Drawing.Size(105, 25)
         Me.butexpexc.TabIndex = 7
-        Me.butexpexc.Text = "Export To Excel"
+        Me.butexpexc.Text = "OK"
         Me.butexpexc.UseVisualStyleBackColor = False
         '
         'GroupBox4
