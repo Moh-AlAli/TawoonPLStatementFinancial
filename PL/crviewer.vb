@@ -76,13 +76,11 @@ Friend Class crviewer
 
         Return cons
     End Function
-    Public Sub New(ByVal _objectHandle As String, ByVal _sess As acc.Session, ByVal facct As String, ByVal tacct As String, ByVal fdate As Integer, ByVal tdate As Integer, ByVal rbram As Boolean, ByVal rbgen As Boolean, ByVal rbjor As Boolean, ByVal rbocj As Boolean, ByVal rbleb As Boolean, ByVal opttype As String, ByVal optsubt As String, ByVal optcat As String, ByVal toopttype As String, ByVal tooptsubt As String, ByVal tooptcat As String)
+    Public Sub New(ByVal _objectHandle As String, ByVal _sess As acc.Session, ByVal fdate As Integer, ByVal tdate As Integer, ByVal rbram As Boolean, ByVal rbgen As Boolean, ByVal rbjor As Boolean, ByVal rbocj As Boolean, ByVal rbleb As Boolean, ByVal opttype As String, ByVal optsubt As String, ByVal optcat As String, ByVal toopttype As String, ByVal tooptsubt As String, ByVal tooptcat As String)
         InitializeComponent()
         ObjectHandle = _objectHandle
         ccompid = _sess.CompanyID
         ccompname = _sess.CompanyName
-        cfacct = facct
-        ctacct = tacct
         cfdate = fdate
         ctdate = tdate
 
@@ -137,7 +135,7 @@ Friend Class crviewer
 
             entity = entity.Substring(0, entity.Length() - 1)
             If entity <> "" Then
-                rdoc.Load("reports\PL.rpt")
+                rdoc.Load("reports\PLStatmfinc.rpt")
 
                 Dim tabs As Tables = rdoc.Database.Tables
                 Dim parv As New ParameterValues
@@ -156,8 +154,7 @@ Friend Class crviewer
                 Next
 
 
-                rdoc.SetParameterValue("afacct", "'" & cfacct & "'")
-                rdoc.SetParameterValue("atacct", "'" & ctacct & "'")
+
 
                 rdoc.SetParameterValue("bfdate", cfdate)
                 rdoc.SetParameterValue("btdate", ctdate)

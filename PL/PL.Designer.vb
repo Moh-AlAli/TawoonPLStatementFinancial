@@ -49,13 +49,6 @@ Partial Class PL
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.btfind = New System.Windows.Forms.Button()
-        Me.Txttoacct = New System.Windows.Forms.TextBox()
-        Me.bffind = New System.Windows.Forms.Button()
-        Me.Txtfrmacct = New System.Windows.Forms.TextBox()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.DateTimePicker2 = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
@@ -63,7 +56,6 @@ Partial Class PL
         Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -73,7 +65,7 @@ Partial Class PL
         Me.CMDClose.Cursor = System.Windows.Forms.Cursors.Default
         Me.CMDClose.Font = New System.Drawing.Font("Tahoma", 8.0!, System.Drawing.FontStyle.Bold)
         Me.CMDClose.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CMDClose.Location = New System.Drawing.Point(288, 566)
+        Me.CMDClose.Location = New System.Drawing.Point(288, 463)
         Me.CMDClose.Name = "CMDClose"
         Me.CMDClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CMDClose.Size = New System.Drawing.Size(81, 25)
@@ -87,7 +79,7 @@ Partial Class PL
         Me.butexpexc.Cursor = System.Windows.Forms.Cursors.Default
         Me.butexpexc.Font = New System.Drawing.Font("Tahoma", 8.0!, System.Drawing.FontStyle.Bold)
         Me.butexpexc.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butexpexc.Location = New System.Drawing.Point(5, 566)
+        Me.butexpexc.Location = New System.Drawing.Point(5, 463)
         Me.butexpexc.Name = "butexpexc"
         Me.butexpexc.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.butexpexc.Size = New System.Drawing.Size(105, 25)
@@ -182,7 +174,7 @@ Partial Class PL
         Me.GroupBox5.Controls.Add(Me.Label1)
         Me.GroupBox5.Controls.Add(Me.Label2)
         Me.GroupBox5.Font = New System.Drawing.Font("Arial Unicode MS", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox5.Location = New System.Drawing.Point(5, 322)
+        Me.GroupBox5.Location = New System.Drawing.Point(5, 224)
         Me.GroupBox5.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.Padding = New System.Windows.Forms.Padding(4)
@@ -390,94 +382,6 @@ Partial Class PL
         Me.Label2.TabIndex = 12
         Me.Label2.Text = "Type"
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.btfind)
-        Me.GroupBox2.Controls.Add(Me.Txttoacct)
-        Me.GroupBox2.Controls.Add(Me.bffind)
-        Me.GroupBox2.Controls.Add(Me.Txtfrmacct)
-        Me.GroupBox2.Controls.Add(Me.Label10)
-        Me.GroupBox2.Controls.Add(Me.Label11)
-        Me.GroupBox2.Font = New System.Drawing.Font("Arial Unicode MS", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(5, 127)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox2.Size = New System.Drawing.Size(371, 98)
-        Me.GroupBox2.TabIndex = 36
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Account Number"
-        '
-        'btfind
-        '
-        Me.btfind.BackColor = System.Drawing.SystemColors.Control
-        Me.btfind.Cursor = System.Windows.Forms.Cursors.Default
-        Me.btfind.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btfind.Image = CType(resources.GetObject("btfind.Image"), System.Drawing.Image)
-        Me.btfind.Location = New System.Drawing.Point(343, 62)
-        Me.btfind.Name = "btfind"
-        Me.btfind.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btfind.Size = New System.Drawing.Size(17, 20)
-        Me.btfind.TabIndex = 29
-        Me.btfind.TabStop = False
-        Me.btfind.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btfind.UseVisualStyleBackColor = False
-        '
-        'Txttoacct
-        '
-        Me.Txttoacct.Location = New System.Drawing.Point(83, 62)
-        Me.Txttoacct.Margin = New System.Windows.Forms.Padding(4)
-        Me.Txttoacct.Multiline = True
-        Me.Txttoacct.Name = "Txttoacct"
-        Me.Txttoacct.Size = New System.Drawing.Size(265, 20)
-        Me.Txttoacct.TabIndex = 3
-        '
-        'bffind
-        '
-        Me.bffind.BackColor = System.Drawing.SystemColors.Control
-        Me.bffind.Cursor = System.Windows.Forms.Cursors.Default
-        Me.bffind.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.bffind.Image = CType(resources.GetObject("bffind.Image"), System.Drawing.Image)
-        Me.bffind.Location = New System.Drawing.Point(343, 25)
-        Me.bffind.Name = "bffind"
-        Me.bffind.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.bffind.Size = New System.Drawing.Size(17, 20)
-        Me.bffind.TabIndex = 27
-        Me.bffind.TabStop = False
-        Me.bffind.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.bffind.UseVisualStyleBackColor = False
-        '
-        'Txtfrmacct
-        '
-        Me.Txtfrmacct.Location = New System.Drawing.Point(83, 26)
-        Me.Txtfrmacct.Margin = New System.Windows.Forms.Padding(4)
-        Me.Txtfrmacct.Multiline = True
-        Me.Txtfrmacct.Name = "Txtfrmacct"
-        Me.Txtfrmacct.Size = New System.Drawing.Size(265, 20)
-        Me.Txtfrmacct.TabIndex = 2
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Arial Unicode MS", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(10, 60)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(22, 15)
-        Me.Label10.TabIndex = 1
-        Me.Label10.Text = "To"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Arial Unicode MS", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(10, 29)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(36, 15)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "From"
-        '
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.DateTimePicker2)
@@ -485,7 +389,7 @@ Partial Class PL
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Font = New System.Drawing.Font("Arial Unicode MS", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(5, 231)
+        Me.GroupBox1.Location = New System.Drawing.Point(5, 127)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
@@ -536,9 +440,8 @@ Partial Class PL
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(386, 600)
+        Me.ClientSize = New System.Drawing.Size(386, 500)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox5)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.CMDClose)
@@ -550,8 +453,6 @@ Partial Class PL
         Me.GroupBox4.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
@@ -584,13 +485,6 @@ Partial Class PL
     Friend WithEvents Label7 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents GroupBox2 As GroupBox
-    Public WithEvents btfind As Button
-    Friend WithEvents Txttoacct As TextBox
-    Public WithEvents bffind As Button
-    Friend WithEvents Txtfrmacct As TextBox
-    Friend WithEvents Label10 As Label
-    Friend WithEvents Label11 As Label
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents DateTimePicker2 As DateTimePicker
     Friend WithEvents DateTimePicker1 As DateTimePicker

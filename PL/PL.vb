@@ -51,7 +51,7 @@ Public Class PL
             End If
 
             Me.Text = compid + " - " + "PL"
-            Txttoacct.Text = "zzzzzzzzzzzzzzzzzzzzzz"
+
             Txttsubt.Text = "zzzzzzzzzzzzzzzzzzzzzz"
             Txtttype.Text = "zzzzzzzzzzzzzzzzzzzzzz"
             Txttcat.Text = "zzzzzzzzzzzzzzzzzzzzzz"
@@ -61,77 +61,7 @@ Public Class PL
         End Try
     End Sub
 
-    Private Sub bffind_Click(sender As Object, e As EventArgs) Handles bffind.Click
 
-        Dim ram As String = ""
-        If ChRAMDAT.Checked = True Then
-            ram = "RAMDAT.dbo."
-        End If
-        Dim gen As String = ""
-        If ChGENDAT.Checked = True Then
-            gen = "GENDAT.dbo."
-        End If
-        Dim jor As String = ""
-        If ChJORDAT.Checked = True Then
-            jor = "JORDAT.dbo."
-        End If
-        Dim ocj As String = ""
-        If ChOCJDAT.Checked = True Then
-            ocj = "OCJDAT.dbo."
-        End If
-        Dim leb As String = ""
-        If ChLEBDAT.Checked = True Then
-            leb = "LEBDAT.dbo."
-        End If
-        If ram = "" And jor = "" And gen = "" And ocj = "" And leb = "" Then
-            MessageBox.Show("Choose At least one entity!")
-        Else
-            Dim vfnd As FromFinder = New FromFinder("GLAMF", "Accounts", ram, gen, jor, ocj, leb, New String() {"ACCTID", "ACCTDESC"}, ERPSession, "", "")
-
-            Dim r As DialogResult = vfnd.ShowDialog(Me)
-            If r = DialogResult.OK Then
-                Txtfrmacct.Text = vfnd.Result.ToArray()(0)
-                Txttoacct.Text = vfnd.Result.ToArray()(0)
-                fndEditBoxValidate(Txtfrmacct, EventArgs.Empty)
-            End If
-        End If
-    End Sub
-
-    Private Sub btfind_Click(sender As Object, e As EventArgs) Handles btfind.Click
-        Dim ram As String = ""
-        If ChRAMDAT.Checked = True Then
-            ram = "RAMDAT.dbo."
-        End If
-        Dim gen As String = ""
-        If ChGENDAT.Checked = True Then
-            gen = "GENDAT.dbo."
-        End If
-        Dim jor As String = ""
-        If ChJORDAT.Checked = True Then
-            jor = "JORDAT.dbo."
-        End If
-        Dim ocj As String = ""
-        If ChOCJDAT.Checked = True Then
-            ocj = "OCJDAT.dbo."
-        End If
-        Dim leb As String = ""
-        If ChLEBDAT.Checked = True Then
-            leb = "LEBDAT.dbo."
-        End If
-
-        If ram = "" And jor = "" And gen = "" And ocj = "" And leb = "" Then
-            MessageBox.Show("Choose At least one entity!")
-        Else
-            Dim vfnd As FromFinder = New FromFinder("GLAMF", "Accounts", ram, gen, jor, ocj, leb, New String() {"ACCTID", "ACCTDESC"}, ERPSession, "", "")
-
-            Dim r As DialogResult = vfnd.ShowDialog(Me)
-            If r = DialogResult.OK Then
-                Txttoacct.Text = vfnd.Result.ToArray()(0)
-
-                fndEditBoxValidate(Txttoacct, EventArgs.Empty)
-            End If
-        End If
-    End Sub
     Private Sub CMD_Exit_Click(sender As Object, e As EventArgs) Handles CMDClose.Click
         Close()
     End Sub
@@ -465,11 +395,7 @@ Public Class PL
 
 
 
-            If Txttoacct.Text = Nothing Then
-                toacct = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
-            Else
-                toacct = Trim(Txttoacct.Text)
-            End If
+
 
             If Txtttype.Text = Nothing Then
                 Toopttype = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
@@ -570,14 +496,14 @@ Public Class PL
             Else
 
 
-                If Trim(Txtfrmacct.Text) <= Trim(toacct) Then
 
 
-                    If fdate <= tdate Then
+
+                If fdate <= tdate Then
                         Try
 
-                            Dim f As Form = New crviewer(ObjectHandle, ERPSession, Trim(Txtfrmacct.Text), toacct, fdate, tdate, ChRAMDAT.Checked, ChGENDAT.Checked, ChJORDAT.Checked, ChOCJDAT.Checked, ChLEBDAT.Checked, Trim(Txtftype.Text), Trim(Txtfsubt.Text), Trim(Txtfcat.Text), totype, tosubtype, tocat)
-                            f.Show()
+                        Dim f As Form = New crviewer(ObjectHandle, ERPSession, fdate, tdate, ChRAMDAT.Checked, ChGENDAT.Checked, ChJORDAT.Checked, ChOCJDAT.Checked, ChLEBDAT.Checked, Trim(Txtftype.Text), Trim(Txtfsubt.Text), Trim(Txtfcat.Text), totype, tosubtype, tocat)
+                        f.Show()
 
                         Catch ex As Exception
                             MessageBox.Show("P&L:" & ex.Message)
@@ -586,10 +512,9 @@ Public Class PL
                     Else
                         MessageBox.Show("P&L: From Date Greater than To Date")
                     End If
-                Else
-                    MessageBox.Show("P&L: From Account Number Greater than To Account Number")
-            End If         
-                End If
+
+            End If
+
 
 
 
