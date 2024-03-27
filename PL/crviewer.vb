@@ -38,7 +38,8 @@ Friend Class crviewer
     Private ctsubt As String
     Private cfcat As String
     Private ctcat As String
-
+    Private cincldprov As Boolean
+    Private cnotcincldprov As Boolean
 
     Friend Property ObjectHandle As String
     Friend Function createdes(ByVal key As String) As TripleDES
@@ -76,7 +77,7 @@ Friend Class crviewer
 
         Return cons
     End Function
-    Public Sub New(ByVal _objectHandle As String, ByVal _sess As acc.Session, ByVal fdate As Integer, ByVal tdate As Integer, ByVal rbram As Boolean, ByVal rbgen As Boolean, ByVal rbjor As Boolean, ByVal rbocj As Boolean, ByVal rbleb As Boolean, ByVal opttype As String, ByVal optsubt As String, ByVal optcat As String, ByVal toopttype As String, ByVal tooptsubt As String, ByVal tooptcat As String)
+    Public Sub New(ByVal _objectHandle As String, ByVal _sess As acc.Session, ByVal fdate As Integer, ByVal tdate As Integer, ByVal rbram As Boolean, ByVal rbgen As Boolean, ByVal rbjor As Boolean, ByVal rbocj As Boolean, ByVal rbleb As Boolean, ByVal opttype As String, ByVal optsubt As String, ByVal optcat As String, ByVal toopttype As String, ByVal tooptsubt As String, ByVal tooptcat As String, ByVal incldprov As Boolean, ByVal notincldprov As Boolean)
         InitializeComponent()
         ObjectHandle = _objectHandle
         ccompid = _sess.CompanyID
@@ -97,7 +98,8 @@ Friend Class crviewer
         cttyp = toopttype
         ctsubt = tooptsubt
         ctcat = tooptcat
-
+        cincldprov = incldprov
+        cnotcincldprov = notincldprov
 
     End Sub
 
@@ -135,7 +137,12 @@ Friend Class crviewer
 
             entity = entity.Substring(0, entity.Length() - 1)
             If entity <> "" Then
-                rdoc.Load("reports\PLStatmfinc.rpt")
+                If cincldprov = True Then
+                    rdoc.Load("reports\PLStatmfincINCPROV.rpt")
+                ElseIf cnotcincldprov = True Then
+                    rdoc.Load("reports\PLStatmfinc.rpt")
+                End If
+
 
                 Dim tabs As Tables = rdoc.Database.Tables
                 Dim parv As New ParameterValues

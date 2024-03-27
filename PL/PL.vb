@@ -502,7 +502,7 @@ Public Class PL
                 If fdate <= tdate Then
                         Try
 
-                        Dim f As Form = New crviewer(ObjectHandle, ERPSession, fdate, tdate, ChRAMDAT.Checked, ChGENDAT.Checked, ChJORDAT.Checked, ChOCJDAT.Checked, ChLEBDAT.Checked, Trim(Txtftype.Text), Trim(Txtfsubt.Text), Trim(Txtfcat.Text), totype, tosubtype, tocat)
+                        Dim f As Form = New crviewer(ObjectHandle, ERPSession, fdate, tdate, ChRAMDAT.Checked, ChGENDAT.Checked, ChJORDAT.Checked, ChOCJDAT.Checked, ChLEBDAT.Checked, Trim(Txtftype.Text), Trim(Txtfsubt.Text), Trim(Txtfcat.Text), totype, tosubtype, tocat, rbinclprov.Checked, rbnotinclprov.Checked)
                         f.Show()
 
                         Catch ex As Exception

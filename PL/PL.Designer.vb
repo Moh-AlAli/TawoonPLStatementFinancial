@@ -54,9 +54,13 @@ Partial Class PL
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.rbnotinclprov = New System.Windows.Forms.RadioButton()
+        Me.rbinclprov = New System.Windows.Forms.RadioButton()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'CMDClose
@@ -65,7 +69,7 @@ Partial Class PL
         Me.CMDClose.Cursor = System.Windows.Forms.Cursors.Default
         Me.CMDClose.Font = New System.Drawing.Font("Tahoma", 8.0!, System.Drawing.FontStyle.Bold)
         Me.CMDClose.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.CMDClose.Location = New System.Drawing.Point(288, 463)
+        Me.CMDClose.Location = New System.Drawing.Point(287, 553)
         Me.CMDClose.Name = "CMDClose"
         Me.CMDClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.CMDClose.Size = New System.Drawing.Size(81, 25)
@@ -79,7 +83,7 @@ Partial Class PL
         Me.butexpexc.Cursor = System.Windows.Forms.Cursors.Default
         Me.butexpexc.Font = New System.Drawing.Font("Tahoma", 8.0!, System.Drawing.FontStyle.Bold)
         Me.butexpexc.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butexpexc.Location = New System.Drawing.Point(5, 463)
+        Me.butexpexc.Location = New System.Drawing.Point(4, 553)
         Me.butexpexc.Name = "butexpexc"
         Me.butexpexc.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.butexpexc.Size = New System.Drawing.Size(105, 25)
@@ -436,11 +440,48 @@ Partial Class PL
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "From"
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.rbnotinclprov)
+        Me.GroupBox3.Controls.Add(Me.rbinclprov)
+        Me.GroupBox3.Font = New System.Drawing.Font("Arial Unicode MS", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(5, 448)
+        Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4)
+        Me.GroupBox3.Size = New System.Drawing.Size(371, 80)
+        Me.GroupBox3.TabIndex = 74
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Provisional.Post"
+        '
+        'rbnotinclprov
+        '
+        Me.rbnotinclprov.AutoSize = True
+        Me.rbnotinclprov.Location = New System.Drawing.Point(219, 36)
+        Me.rbnotinclprov.Name = "rbnotinclprov"
+        Me.rbnotinclprov.Size = New System.Drawing.Size(109, 23)
+        Me.rbnotinclprov.TabIndex = 1
+        Me.rbnotinclprov.TabStop = True
+        Me.rbnotinclprov.Text = "Not Include"
+        Me.rbnotinclprov.UseVisualStyleBackColor = True
+        '
+        'rbinclprov
+        '
+        Me.rbinclprov.AutoSize = True
+        Me.rbinclprov.Location = New System.Drawing.Point(13, 36)
+        Me.rbinclprov.Name = "rbinclprov"
+        Me.rbinclprov.Size = New System.Drawing.Size(79, 23)
+        Me.rbinclprov.TabIndex = 0
+        Me.rbinclprov.TabStop = True
+        Me.rbinclprov.Text = "Include"
+        Me.rbinclprov.UseVisualStyleBackColor = True
+        '
         'PL
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(386, 500)
+        Me.ClientSize = New System.Drawing.Size(386, 590)
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox5)
         Me.Controls.Add(Me.GroupBox4)
@@ -455,6 +496,8 @@ Partial Class PL
         Me.GroupBox5.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -490,4 +533,7 @@ Partial Class PL
     Friend WithEvents DateTimePicker1 As DateTimePicker
     Friend WithEvents Label4 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents rbnotinclprov As RadioButton
+    Friend WithEvents rbinclprov As RadioButton
 End Class
