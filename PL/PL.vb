@@ -49,7 +49,61 @@ Public Class PL
             If Not ObjectHandle Is Nothing Then
                 SessionFromERP(Handle)
             End If
+            If compid = "GENDAT" Then
+                ChRAMDAT.Visible = True
+                ChGENDAT.Visible = True
+                ChJORDAT.Visible = True
+                ChLEBDAT.Visible = True
+                ChOCJDAT.Visible = True
+                ChOCJDAT.Checked = False
+                ChRAMDAT.Checked = False
+                ChJORDAT.Checked = False
+                ChLEBDAT.Checked = False
+                ChGENDAT.Checked = False
+            ElseIf compid = "RAMDAT" Then
+                ChRAMDAT.Visible = True
+                ChGENDAT.Visible = False
+                ChJORDAT.Visible = False
+                ChLEBDAT.Visible = False
+                ChOCJDAT.Visible = False
 
+                ChRAMDAT.Checked = True
+            ElseIf compid = "JORDAT" Then
+                ChRAMDAT.Visible = False
+                ChGENDAT.Visible = False
+                ChJORDAT.Visible = True
+                ChLEBDAT.Visible = False
+                ChOCJDAT.Visible = False
+
+                ChJORDAT.Checked = True
+
+            ElseIf compid = "GENDAT" Then
+                ChRAMDAT.Visible = False
+                ChGENDAT.Visible = True
+                ChJORDAT.Visible = False
+                ChLEBDAT.Visible = False
+                ChOCJDAT.Visible = False
+
+                ChGENDAT.Checked = True
+            ElseIf compid = "LEBDAT" Then
+                ChRAMDAT.Visible = False
+                ChGENDAT.Visible = False
+                ChJORDAT.Visible = False
+                ChLEBDAT.Visible = True
+                ChOCJDAT.Visible = False
+
+                ChLEBDAT.Checked = True
+            ElseIf compid = "OCJDAT" Then
+                ChRAMDAT.Visible = False
+                ChGENDAT.Visible = False
+                ChJORDAT.Visible = False
+                ChLEBDAT.Visible = False
+                ChOCJDAT.Visible = True
+
+                ChOCJDAT.Checked = True
+            End If
+
+            rbinclprov.Checked = True
             Me.Text = compid + " - " + "PL"
 
             Txttsubt.Text = "zzzzzzzzzzzzzzzzzzzzzz"
